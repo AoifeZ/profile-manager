@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers  import JSONParser
 from django.http.response import JsonResponse
@@ -9,7 +8,7 @@ from EmployeeApp.serializers import DepartmentSerializer, EmployeeSerializer
 # Create your views here.
 
 @csrf_exempt
-def departmentApi(request,id=0):
+def departmentApi(request, pk=None):
 		if request.method=='GET':
 			departments = Departments.objects.all()
 			departments_serializer = DepartmentSerializer(departments, many=True)
@@ -32,7 +31,7 @@ def departmentApi(request,id=0):
 			return JSONParser('Failed to Update', safe=False)
 		
 		elif request.method == 'DELETE':
-			departments = Departments.objects.get(DepartmentId=id)
-			department.delete()			
+			departments = Departments.objects.get(DepartmentId=pk)
+			departments.delete()
 			return JsonResponse('Deleted Successfully', safe=False)
 		
