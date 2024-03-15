@@ -36,8 +36,8 @@ def departmentApi(request, pk=None):
 			return JSONParser('Failed to Update', safe=False)
 		
 		elif request.method == 'DELETE':
-			departments = Departments.objects.get(DepartmentId=pk)
-			departments.delete()
+			department = Departments.objects.get(DepartmentId=pk)
+			department.delete()
 			return JsonResponse('Deleted Successfully', safe=False)
 		
 		
@@ -76,6 +76,9 @@ def employeeApi(request, pk=None):
 		
 @csrf_exempt
 def SaveFile(request):
-	file=request.FILES['myFile'] 
-	file_name = default_storage.save(file.name,file)
-	return JsonResponse(file_name,safe=False)
+    if request.method == 'POST' and request.FILES['Photo']:
+        file = request.FILES['Photo']
+        file_name = default_storage.save(file.name, file)
+        return JsonResponse(file_name, safe=False)
+    else:
+        return JsonResponse('File not found', status=400)
